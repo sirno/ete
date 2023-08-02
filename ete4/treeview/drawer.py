@@ -52,7 +52,7 @@ def show_tree(t, layout=None, tree_style=None, win_name=None):
         signal.signal(signal.SIGALRM, exit_gui)
         signal.alarm(GUI_TIMEOUT)
 
-    _QApp.exec_()
+    _QApp.exec()
 
 def render_tree(t, imgName, w=None, h=None, layout=None,
                 tree_style = None, header=None, units="px",

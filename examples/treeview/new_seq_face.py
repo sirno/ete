@@ -150,7 +150,7 @@ class MySequenceFace(faces.StaticItemFace):
     def update_items(self):
         #self.item = QGraphicsRectItem(0,0,self._total_w, self.row_h)
         seq_width = 0
-        nopen = QPen(QtCore.Qt.NoPen)
+        nopen = QPen(QtCore.Qt.PenStyle.NoPen)
         font = QFont("Courier", self.fsize)
         rect_cls = self.InteractiveLetterItem if self.interact else QGraphicsRectItem
         for i, letter in enumerate(self.seq):

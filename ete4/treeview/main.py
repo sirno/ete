@@ -67,10 +67,10 @@ class _Border(object):
             if self.color:
                 pen = QPen(QColor(self.color))
             else:
-                pen = QPen(Qt.NoPen)
+                pen = QPen(Qt.PenStyle.NoPen)
             set_pen_style(pen, self.type)
             pen.setWidth(self.width)
-            pen.setCapStyle(Qt.FlatCap)
+            pen.setCapStyle(Qt.PenCapStyle.FlatCap)
             border.setPen(pen)
             return border
         else:
@@ -95,7 +95,7 @@ class _Background(object):
             brush = QBrush(QColor(self.color))
             bg.setPen(pen)
             bg.setBrush(brush)
-            bg.setFlag(QGraphicsItem.ItemStacksBehindParent)
+            bg.setFlag(QGraphicsItem.GraphicsItemFlag.ItemStacksBehindParent)
             return bg
         else:
             return None
@@ -577,11 +577,11 @@ def add_face_to_node(face, node, column, aligned=False, position="branch-right")
 
 def set_pen_style(pen, line_style):
     if line_style == 0:
-        pen.setStyle(Qt.SolidLine)
+        pen.setStyle(Qt.PenStyle.SolidLine)
     elif line_style == 1:
-        pen.setStyle(Qt.DashLine)
+        pen.setStyle(Qt.PenStyle.DashLine)
     elif line_style == 2:
-        pen.setStyle(Qt.DotLine)
+        pen.setStyle(Qt.PenStyle.DotLine)
 
 
 def save(scene, imgName, w=None, h=None, dpi=90,\
@@ -610,15 +610,15 @@ def save(scene, imgName, w=None, h=None, dpi=90,\
         units = "px"
         w = main_rect.width()
         h = main_rect.height()
-        ratio_mode = Qt.KeepAspectRatio
+        ratio_mode = Qt.AspectRatioMode.KeepAspectRatio
     elif w and h:
-        ratio_mode = Qt.IgnoreAspectRatio
+        ratio_mode = Qt.AspectRatioMode.IgnoreAspectRatio
     elif h is None :
         h = w * aspect_ratio
-        ratio_mode = Qt.KeepAspectRatio
+        ratio_mode = Qt.AspectRatioMode.KeepAspectRatio
     elif w is None:
         w = h / aspect_ratio
-        ratio_mode = Qt.KeepAspectRatio
+        ratio_mode = Qt.AspectRatioMode.KeepAspectRatio
 
     # Adjust to resolution
     if units == "mm":
@@ -686,14 +686,14 @@ def save(scene, imgName, w=None, h=None, dpi=90,\
         if ext == "PS":
             format = QPrinter.PostScriptFormat
         else:
-            format = QPrinter.PdfFormat
+            format = QPrinter.OutputFormat.PdfFormat
 
-        printer = QPrinter(QPrinter.HighResolution)
+        printer = QPrinter(QPrinter.PrinterMode.HighResolution)
         printer.setResolution(dpi)
         printer.setOutputFormat(format)
         printer.setPageSize(QPrinter.A4)
-        printer.setPaperSize(QSizeF(w, h), QPrinter.DevicePixel)
-        printer.setPageMargins(0, 0, 0, 0, QPrinter.DevicePixel)
+        printer.setPaperSize(QSizeF(w, h), QPrinter.Unit.DevicePixel)
+        printer.setPageMargins(0, 0, 0, 0, QPrinter.Unit.DevicePixel)
 
         #pageTopLeft = printer.pageRect().topLeft()
         #paperTopLeft = printer.paperRect().topLeft()
@@ -710,14 +710,14 @@ def save(scene, imgName, w=None, h=None, dpi=90,\
         scene.render(pp, targetRect, scene.sceneRect(), ratio_mode)
     else:
         targetRect = QRectF(0, 0, w, h)
-        ii= QImage(int(w), int(h), QImage.Format_ARGB32)
-        ii.fill(QColor(Qt.white).rgb())
+        ii= QImage(int(w), int(h), QImage.Format.Format_ARGB32)
+        ii.fill(QColor(Qt.GlobalColor.white).rgb())
         ii.setDotsPerMeterX(int(dpi / 0.0254)) # Convert inches to meters
         ii.setDotsPerMeterY(int(dpi / 0.0254))
         pp = QPainter(ii)
-        pp.setRenderHint(QPainter.Antialiasing)
-        pp.setRenderHint(QPainter.TextAntialiasing)
-        pp.setRenderHint(QPainter.SmoothPixmapTransform)
+        pp.setRenderHint(QPainter.RenderHint.Antialiasing)
+        pp.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+        pp.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
 
         scene.render(pp, targetRect, scene.sceneRect(), ratio_mode)
         pp.end()
